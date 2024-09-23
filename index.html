@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Search Engine</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: white;
+        margin: 0;
+    }
+
+    header {
+        display: flex;
+        justify-content: center;
+        margin-top: 110px;
+        align-items: center;
+        background-color: white;
+        width: 100%;
+        padding: 20px 0;
+        color: rgb(20, 20, 20);
+    }
+
+    header img {
+        height: 200px;
+        margin-right: 10px;
+    }
+
+    header h1 {
+        margin: 0;
+    }
+
+    .search-container {
+        background-color: #fbfbfd;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(16, 16, 16, 0.1);
+        text-align: center;
+        width: 100%;
+        max-width: 400px;
+        margin-top: 20px;
+    }
+
+    input[type="text"] {
+        padding: 10px;
+        width: 80%;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        padding: 10px 15px;
+        margin: 5px;
+        border-radius: 5px;
+        border: none;
+        background-color: #3498db;
+        color: #fcfcfc;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #2980b9;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    li {
+        padding: 5px 0;
+        border-bottom: 1px solid #ddd;
+    }
+</style>
+<body>
+    <header>
+        <img src="logo.png" alt="Logo">
+        <h1>Search Engine</h1>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Enter a keyword...">
+        <button id="search-btn">Search</button>
+        <button id="clear-btn">Clear History</button>
+        
+        <h2>Search History</h2>
+        <ul id="search-history"></ul>
+    </div>
+    
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const searchBtn = document.getElementById('search-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const searchHistoryEl = document.getElementById('search-history');
+
+        let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+        const displaySearchHistory = () => {
+            searchHistoryEl.innerHTML = searchHistory.map(term => `<li>${term}</li>`).join('');
+        };
+
+        const addSearchTerm = term => {
+            if (term && !searchHistory.includes(term)) {
+                searchHistory.push(term);
+                localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+                displaySearchHistory();
+            }
+        };
+
+        searchBtn.addEventListener('click', () => {
+            addSearchTerm(searchInput.value.trim());
+            searchInput.value = '';
+        });
+
+        clearBtn.addEventListener('click', () => {
+            searchHistory = [];
+            localStorage.removeItem('searchHistory');
+            displaySearchHistory();
+        });
+
+        displaySearchHistory();
+    </script>
+</body>
+</html>
